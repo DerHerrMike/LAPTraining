@@ -11,7 +11,7 @@ include_once __DIR__ . '/classes/productClass.php';
 
 $id = $_GET['pid'];
 
-echo 'product id="' . $id . '"';
+//echo 'product id="' . $id . '"';
 ?>
 
 <div class="content">
@@ -30,6 +30,7 @@ echo 'product id="' . $id . '"';
             <th>Description</th>
             <th>Image File Name</th>
             <th>Price</th>
+            <th>Status</th>
         </tr>
 
         <?php
@@ -56,21 +57,13 @@ echo 'product id="' . $id . '"';
     }
 
     if (isset($_POST['update'])) {
-        try {
+       $product->createSql($_POST);
 
-            $returnedProduct = $product->getAProduct($_POST['pid']);
-            if ($returnedProduct['name'] == $_POST['name']) {
-                $_POST['name'] = $returnedProduct['name'];
-            }
+       }
 
-        } catch (Exception $e) {
-            echo $e->getMessage();
-            try {
-                $product->updateProduct($_POST['pid'], $_POST['name'], $_POST['description'], $_POST['image'], $_POST['price']);
-            } catch (Exception $e) {
-                echo $e->getMessage();
-            }
-        }
+    if(isset($_POST['status'])) {
+        $product->updateStatus($_POST['pid']);
+
     }
     ?>
 </div>

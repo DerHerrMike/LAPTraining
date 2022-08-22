@@ -22,6 +22,7 @@ include_once __DIR__ . '/classes/productClass.php';
                 <th>Description</th>
                 <th>Image File Name</th>
                 <th>Price</th>
+                <th>Status</th>
                 <th>Manage</th>
             </tr>
 
