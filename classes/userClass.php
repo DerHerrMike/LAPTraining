@@ -95,7 +95,7 @@ class User extends Connection
         if ($stmt->rowCount() == 1) {
 
             $_SESSION['logged_in'] = true;
-            $_SESSION['id'] = $userData['id'];
+            $_SESSION['user_id'] = $userData['id'];
             $_SESSION['user_role'] = $userData['is_admin'];
             echo 'You have been logged in successfully!';
             if ($_SESSION['user_role'] == 1) {

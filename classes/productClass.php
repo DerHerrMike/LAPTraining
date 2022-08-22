@@ -13,11 +13,16 @@ class Product extends Connection
         while ($product = $stmt->fetch()) {
             if ($product['status'] == 1) {
                 echo '
-        <div class="productThumb">
-       <h4>' . $product['name'] . '</h4>
-       <img class="image" src="img/' . $product['image'] . '">
-       <p>' . $product['price'] . " Euro" . '</p>
-        </div>  
+       <div class="productThumb" >
+        <h4>' . $product['name'] . '</h4>
+        <img class="image" src="img/' . $product['image'] . '">
+        <p>' . $product['price'] . " Euro" . '</p>
+        <form action="#" method="post">
+        <input type="hidden" name="product_id" value="' . $product['id'] . '">
+        <input type="hidden" name="price" value="' . $product['price'] . '">
+        <button type="submit" name="add">add to cart</button>
+        </form>
+       </div>  
         ';
             } else {
                 return;
@@ -151,7 +156,8 @@ class Product extends Connection
         }
     }
 
-    public function updateStatus($product_id){
+    public function updateStatus($product_id)
+    {
         $sql = "SELECT * FROM product WHERE id = ?";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute([$product_id]);
@@ -180,8 +186,6 @@ class Product extends Connection
         } else {
             echo 'Product not active';
         }
-
-
 
 
     }
