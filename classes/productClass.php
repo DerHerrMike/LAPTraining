@@ -13,19 +13,38 @@ class Product extends Connection
         while ($product = $stmt->fetch()) {
             if ($product['status'] == 1) {
                 echo '
-       <div class="productThumb" >
+       <div class="productThumb">
+       <form action="product.php?product_id=' . $product['id'] . '" method="post">
         <h4>' . $product['name'] . '</h4>
         <img class="image" src="img/' . $product['image'] . '">
         <p>' . $product['price'] . " Euro" . '</p>
-        <form action="#" method="post">
-        <input type="hidden" name="product_id" value="' . $product['id'] . '">
         <input type="hidden" name="price" value="' . $product['price'] . '">
-        <button type="submit" name="add">add to cart</button>
+        <button type="submit" name="details">details</button>
         </form>
        </div>  
         ';
             } else {
                 return;
+            }
+        }
+    }
+
+    public function getProducts()
+    {
+        $sql = "SELECT * FROM product";
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute();
+
+        while ($product = $stmt->fetch()) {
+            if ($product['status'] == 1) {
+                echo "
+            <tr>
+            <td>" . $product['name'] . "</td>
+            <td><img class='image' src='img/" . $product['image'] . "'></td>
+            <td>" . $product['price'] . "</td>
+            <td><a href='product.php?pid=" . $product['id'] . "'>see more</a></td>
+            </tr>
+            ";
             }
         }
     }
@@ -97,14 +116,25 @@ class Product extends Connection
         }
     }
 
-    public function getAProduct($product_id)
+    public function getAProduct($product_id, $user_id)
     {
-        $sql = "SELECT * FROM product WHERE id  = ?";
+        $sql = "SELECT * FROM laptraining.product WHERE id  = ?";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute([$product_id]);
         $result = $stmt->fetch();
-        return $result;
+
+        echo '
+        <tr>
+        <td> ' . $result['name'] . '</td>
+        <td> ' . $result['description'] . '</td>
+        
+        <td> <img class="image" src="img/' . $result['image'] . '"></td>
+        <td> EUR ' . $result['price'] . '</td>
+        </tr>
+        ';
+        //        <form method="post" action="cart.php?product_id=' . $product_id . '&user_id=' . $user_id . '&quantity=' . $_POST['quantity'] . '">
     }
+
 
     /**
      * @throws Exception

@@ -20,7 +20,7 @@ class Cart extends Connection
             $stmt->execute($user_id);
             $result = $stmt->fetch();
             $cart_id = $result['id'];
-            self::createCartItem($cart_id,$product_id, $price);
+            self::createCartItem($cart_id, $product_id, $price);
         }
 
 
@@ -33,13 +33,21 @@ class Cart extends Connection
         $sql = "INSERT INTO laptraining.cart (user_id, created) VALUES (?, ?)";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute([$user_id, $created_at]);
-        echo "Cart created";
     }
 
-    public function createCartItem($cart_id, $product_id, $price)
+    public function createCartItem($cart_id, $product_id, $quantity, $price)
     {
+        $sql = "INSERT INTO laptraining.cart_item (cart_id, product_id, quantity, price) VALUES (?,?,?,?)";
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute([$cart_id, $product_id, $quantity, $price]);
+        echo "CartItem created";
+    }
 
-
+    public function getCart($user_id){
+        $sql = "SELECT * FROM laptraining.cart WHERE user_id = ?";
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute([$user_id]);
+        return $stmt->fetch();
     }
 
 }
