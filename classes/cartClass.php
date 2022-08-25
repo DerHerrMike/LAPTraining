@@ -37,17 +37,47 @@ class Cart extends Connection
 
     public function createCartItem($cart_id, $product_id, $quantity, $price)
     {
-        $sql = "INSERT INTO laptraining.cart_item (cart_id, product_id, quantity, price) VALUES (?,?,?,?)";
+        $sql = "SELECT * FROM laptraining.cart_item WHERE cart_id = ? AND product_id = ?";
         $stmt = $this->connect()->prepare($sql);
-        $stmt->execute([$cart_id, $product_id, $quantity, $price]);
-        echo "CartItem created";
+        $stmt->execute([$cart_id, $product_id]);
+        $result = $stmt->fetch();
+        if($stmt->rowCount() == 1) {
+            $sql = "UPDATE laptraining.cart_item SET quantity = quantity + ? WHERE cart_id = ? AND product_id = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([ $quantity, $cart_id, $product_id]);
+            echo "quantity updated";
+        }
+        else {
+            $sql = "INSERT INTO laptraining.cart_item (cart_id, product_id, quantity, price) VALUES (?,?,?,?)";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$cart_id, $product_id, $quantity, $price]);
+            echo "CartItem created";
+        }
+
+
     }
 
-    public function getCart($user_id){
+    public function getCartID($user_id){
         $sql = "SELECT * FROM laptraining.cart WHERE user_id = ?";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute([$user_id]);
-        return $stmt->fetch();
+        $result = $stmt->fetch();
+        if($result === false) {
+            return null;
+        }
+        else {
+            return $result['id'];
+        }
+    }
+
+    public function getCartDetails($cart_id) {
+        $sql = "SELECT * FROM laptraining.cart WHERE id =?";
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute([$cart_id]);
+        $result = $stmt->fetch();
+
+
+
     }
 
 }

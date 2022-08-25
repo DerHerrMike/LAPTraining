@@ -116,7 +116,7 @@ class Product extends Connection
         }
     }
 
-    public function getAProduct($product_id, $user_id)
+    public function getAProduct($product_id)
     {
         $sql = "SELECT * FROM laptraining.product WHERE id  = ?";
         $stmt = $this->connect()->prepare($sql);
@@ -130,11 +130,33 @@ class Product extends Connection
         
         <td> <img class="image" src="img/' . $result['image'] . '"></td>
         <td> EUR ' . $result['price'] . '</td>
+        <td><form method="post" action="#">
+         <input type="number" name="quantity">
+            <button type="submit" name="add">add to cart</button>
+        </td>
         </tr>
         ';
-        //        <form method="post" action="cart.php?product_id=' . $product_id . '&user_id=' . $user_id . '&quantity=' . $_POST['quantity'] . '">
+
     }
 
+    public function getProductPrice($product_id){
+        $sql = "SELECT * FROM laptraining.product WHERE id  =?";
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute([$product_id]);
+        $result = $stmt->fetch();
+        $price = $result['price'];
+        return $price;
+
+    }
+
+    public function getProductName($product_id) {
+        $sql = "SELECT * FROM laptraining.product WHERE id  =?";
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute([$product_id]);
+        $result = $stmt->fetch();
+        $name = $result['name'];
+        return $name;
+    }
 
     /**
      * @throws Exception
