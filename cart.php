@@ -26,21 +26,22 @@ $product = new Product();
         <table style="background: white; border: 1px solid #ccc; border-radius: 3px; padding: 10px;">
             <tr>
                 <th>Name</th>
-                <th>Price</th>
                 <th>Quantity</th>
+                <th>Price / unit</th>
+                <th>Total</th>
             </tr>
 
 
                         <?php
             $cartItem = new CartItem();
-            $cartItem->getCartItems($cart_id);
+            $cartItem->displayCartItems($cart_id);
             ?>
         </table>
     </div>
 <br><br>
 
 <div class="container_small">
-    <form method="post" action="#">
+    <form method="post" action="purchase.php?cart_id=<?php echo $cart_id; ?>">
         <button type="submit" name="order">buy now!</button>
     </form>
 </div>
@@ -48,15 +49,6 @@ $product = new Product();
 
 <?php
 
-/*echo '
-    <br><br>
-    <div class="content">
-    <h4>Product ID:' . $product_id . '</h4>
-    <br><br>
-    <h4>User ID:' . $user_id . '</h4>
-    <br><br>
-   
-    </div>
-    ';*/
+
 
 include __DIR__ . '/inc/footer.php'; ?>
