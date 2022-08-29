@@ -57,9 +57,12 @@ $id = $_GET['pid'];
     }
 
     if (isset($_POST['update'])) {
-       $product->createSql($_POST);
+        try {
+            $product->createSql($_POST);
+        } catch (Exception $e) {
+        }
 
-       }
+    }
 
     if(isset($_POST['status'])) {
         $product->updateStatus($_POST['pid']);

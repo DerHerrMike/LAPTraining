@@ -15,6 +15,12 @@ include_once __DIR__ . '/classes/productClass.php';
     </div>
 
     <div class="container">
+        <div class="container_small">
+            <br>
+            <form action="product_new.php" method="post">
+                <button type="submit" name="new">add new product</button>
+            </form>
+        </div>
         <table style="background: white; border: 1px solid #ccc; border-radius: 3px; padding: 10px;">
             <tr>
                 <th>Product ID</th>
@@ -34,14 +40,17 @@ include_once __DIR__ . '/classes/productClass.php';
         <br><br>
     </div>
 
+
+
+
+
 <?php
-if(isset($_POST['deletebtn'])){
+if (isset($_POST['deletebtn'])) {
     $id = $_POST['product_id'];
     $product = new Product();
     $product->deleteProduct($id);
 }
 ?>
-
 
 
 <?php include __DIR__ . '/inc/footer.php'; ?>

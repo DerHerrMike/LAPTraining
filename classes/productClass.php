@@ -4,6 +4,64 @@ include __DIR__ . '/../inc/dbconnect.php';
 class Product extends Connection
 {
 
+    public function createProduct($product_data, $file)
+    {
+
+        $name = $product_data['name'];
+        $description = $product_data['description'];
+        $price = $product_data['price'];
+        $status = $product_data['status'];
+
+
+        $sql = "INSERT INTO laptraining.product (name, description, image, price, status) VALUES (?, ?, ?, ?, ?)";
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute([$name, $description, $file, $price, $status]);
+        echo "Product added successfully, you will be redirected shortly";
+        header("Refresh: 1.5; url=products_admin.php");
+    }
+
+    public function uploadProductImage(){
+        $target_dir = "img/";
+        $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+        $uploadOk = 1;
+        $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+    // Check if image file is an actual image or fake image
+        $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+        if($check !== false) {
+            echo "File is an image - " . $check["mime"] . ".";
+            $uploadOk = 1;
+        } else {
+            echo "File is not an image.";
+            $uploadOk = 0;
+        }
+    // Check if file already exists
+        if (file_exists($target_file)) {
+            echo "Sorry, file already exists.";
+            $uploadOk = 0;
+        }
+        // Check file size
+        if ($_FILES["fileToUpload"]["size"] > 500000) {
+            echo "Sorry, this image file is too large.";
+            $uploadOk = 0;
+        }// Allow certain file formats
+        if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+            && $imageFileType != "gif" ) {
+            echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+            $uploadOk = 0;
+        }
+        // Check if $uploadOk is set to 0 by an error
+        if ($uploadOk == 0) {
+            echo "Sorry, your file was not uploaded.";
+        // if everything is ok, try to upload file
+        } else {
+            if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+                echo "The file " . htmlspecialchars(basename($_FILES["fileToUpload"]["name"])) . " has been uploaded.";
+            } else {
+                echo "Sorry, there was an error uploading your file.";
+            }
+        }
+    }
+
     public function loadAllProducts()
     {
         $sql = "SELECT * FROM product";
@@ -139,7 +197,8 @@ class Product extends Connection
 
     }
 
-    public function getProductPrice($product_id){
+    public function getProductPrice($product_id)
+    {
         $sql = "SELECT * FROM laptraining.product WHERE id  =?";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute([$product_id]);
@@ -149,7 +208,8 @@ class Product extends Connection
 
     }
 
-    public function getProductName($product_id) {
+    public function getProductName($product_id)
+    {
         $sql = "SELECT * FROM laptraining.product WHERE id  =?";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute([$product_id]);

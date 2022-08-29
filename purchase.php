@@ -7,20 +7,30 @@ if (!isset($_SESSION['logged_in'])) {
 include_once __DIR__ . '/classes/productClass.php';
 include_once __DIR__ . '/classes/CartItemClass.php';
 $cart_id =$_GET['cart_id'];
-
+$orderDetails = new CartItem();
+$order = $orderDetails->getOrderItems($cart_id);
+$price_total = 0;
+$grandTotal = 0;
+foreach ($order as $invoice_item) {
+    $quantity = $invoice_item['quantity'];
+    $pricePU = $invoice_item['price'];
+    $price_total = $quantity * $pricePU;
+    $grandTotal += $price_total;
+}
 ?>
 
 <div class="content">
     <br><br>
     <article>
         <h2>Thanks for your order!</h2>
+        <br><br>
+        <p>Your invoice for EUR <?php echo $grandTotal ?> has been sent to your email address </p>
     </article>
 </div>
 <br><br>
 
 <div class="container">
-<?php $orderDetails = new CartItem();
-$order =$orderDetails->getOrderItems($cart_id);
+<?php
 //
 //echo var_dump($order);
 

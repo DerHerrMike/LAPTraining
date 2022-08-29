@@ -1,6 +1,6 @@
 <?php
 include_once __DIR__ . '/../inc/dbconnect.php';
-include_once __DIR__ . '/../classes/productClass.php';
+
 
 class CartItem extends Connection
 {
@@ -47,7 +47,7 @@ class CartItem extends Connection
 
     public function getOrderItems($cart_id)
     {
-
+        include_once __DIR__ . '/../classes/productClass.php';
         $product = new Product();
         $fullOrder = array(); // array for all order items
 
