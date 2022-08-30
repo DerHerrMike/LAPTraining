@@ -53,7 +53,7 @@ if (isset($_POST['add'])) {
 //    $name = $result(['name']);
     $cart = new Cart();
     $cart_id = $cart->getCartID($user_id);
-    if ($cart_id == NULL) {
+    if ($cart_id == null) {
         $cart->createCart($user_id);
         $cart_id = $cart->getCartID($user_id);
     }

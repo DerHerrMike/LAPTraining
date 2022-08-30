@@ -26,6 +26,22 @@ class Cart extends Connection
 
     }
 
+    public function orderCart($id)
+    {
+
+        $ordered_at = date('Y-m-d H:i:s');
+        $sql = "SELECT * FROM laptraining.cart WHERE id = ?";
+        $stmt = $this->connect()->prepare($sql);
+        $stmt->execute([$id]);
+        $result = $stmt->fetch();
+        if ($stmt->rowCount() == 1) {
+            $sql = "UPDATE laptraining.cart SET ordered = ? WHERE id = ?";
+            $stmt = $this->connect()->prepare($sql);
+            $stmt->execute([$ordered_at, $id]);
+        }
+    }
+
+
     public function createCart($user_id)
     {
 
@@ -41,13 +57,12 @@ class Cart extends Connection
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute([$cart_id, $product_id]);
         $result = $stmt->fetch();
-        if($stmt->rowCount() == 1) {
+        if ($stmt->rowCount() == 1) {
             $sql = "UPDATE laptraining.cart_item SET quantity = quantity + ? WHERE cart_id = ? AND product_id = ?";
             $stmt = $this->connect()->prepare($sql);
-            $stmt->execute([ $quantity, $cart_id, $product_id]);
+            $stmt->execute([$quantity, $cart_id, $product_id]);
             echo "quantity updated";
-        }
-        else {
+        } else {
             $sql = "INSERT INTO laptraining.cart_item (cart_id, product_id, quantity, price) VALUES (?,?,?,?)";
             $stmt = $this->connect()->prepare($sql);
             $stmt->execute([$cart_id, $product_id, $quantity, $price]);
@@ -57,25 +72,32 @@ class Cart extends Connection
 
     }
 
-    public function getCartID($user_id){
+    public function getCartID($user_id)
+    {
         $sql = "SELECT * FROM laptraining.cart WHERE user_id = ?";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute([$user_id]);
         $result = $stmt->fetch();
-        if($result === false) {
+        if ($result === false) {
             return null;
         }
-        else {
+        if ($stmt->rowCount() == 1) {
+            if (!empty ($result['ordered'])) {
+                return null;
+            }
+        } else {
             return $result['id'];
         }
+        return $result['id'];
     }
 
-    public function getCartDetails($cart_id) {
+
+    public function getCartDetails($cart_id)
+    {
         $sql = "SELECT * FROM laptraining.cart WHERE id =?";
         $stmt = $this->connect()->prepare($sql);
         $stmt->execute([$cart_id]);
         $result = $stmt->fetch();
-
 
 
     }

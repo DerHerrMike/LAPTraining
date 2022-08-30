@@ -6,14 +6,17 @@ if (!isset($_SESSION['logged_in'])) {
 }
 include_once __DIR__ . '/classes/productClass.php';
 include_once __DIR__ . '/classes/CartItemClass.php';
+include_once __DIR__ . '/classes/CartClass.php';
 $cart_id =$_GET['cart_id'];
+$cart = new Cart();
+$cart->orderCart($cart_id);
 $orderDetails = new CartItem();
 $order = $orderDetails->getOrderItems($cart_id);
 $price_total = 0;
 $grandTotal = 0;
 foreach ($order as $invoice_item) {
-    $quantity = $invoice_item['quantity'];
-    $pricePU = $invoice_item['price'];
+    $pricePU = $invoice_item[1];
+    $quantity = $invoice_item[2];
     $price_total = $quantity * $pricePU;
     $grandTotal += $price_total;
 }
@@ -31,30 +34,12 @@ foreach ($order as $invoice_item) {
 
 <div class="container">
 <?php
-//
-//echo var_dump($order);
 
-//echo $order([0][0] . ' ' . $order[0][1] . ' ' . $order[0][2]);
+foreach($order as $orderItem){
 
-echo '<br><br>';
-
-echo $order[0][0] . ' ' . $order[0][1] . ' ' . $order[0][2];
-
-echo '<br><br>';
-
-echo $order[1][0] . ' ' . $order[1][1] . ' ' . $order[1][2];
-
-
-echo '<br><br>';
-
-//echo $order['orderItem'][0] . ' ' . $order[0][1] . ' ' . $order[0][2];
-
-
-//echo $order[1][0][0] . ' ' . $order[1][0][1] . ' ' . $order[1][0][2];
-
-//echo $order[2][0] . ' ' . $order[2][1] . ' ' . $order[2][2];
-
-
+    echo '<br><br>';
+    echo $orderItem[0] . '   ' . $orderItem[1] . '   ' . $orderItem[2];
+}
 ?>
 
 </div>

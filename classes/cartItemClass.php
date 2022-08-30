@@ -45,7 +45,7 @@ class CartItem extends Connection
 
     }
 
-    public function getOrderItems($cart_id)
+    public function getOrderItems($cart_id): array
     {
         include_once __DIR__ . '/../classes/productClass.php';
         $product = new Product();
